@@ -1,7 +1,9 @@
 package com.example.justjava;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
+
 
 //button
     public void increment(View view){
@@ -32,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
 //button
 
     public void submitOrder(View view) {
+        CheckBox whippedCreamCheckbox= (CheckBox) findViewById(R.id.whipped_cream_checkbox);
+        boolean hasWhippedCream = whippedCreamCheckbox.isChecked();
+        Log.v("MainActivity", "Has whipped ceram: "+ hasWhippedCream);
         int price =calculatePrice();
         String priceMessage= createOrderSummary(price);
         displayMessage(priceMessage);
