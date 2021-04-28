@@ -3,7 +3,9 @@ package com.example.justjava;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,13 +19,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-//button
+// + button
     public void increment(View view){
+        if(quantity==100){
+            Toast.makeText(this,"You cannot have more than 100 coffees",Toast.LENGTH_SHORT).show();
+            return;
+        }
         quantity= quantity+1;
         display(quantity);
     }
     public void decrement(View view){
-
+       if(quantity ==1){
+           Toast.makeText(this, "You cannot have less than 1 coffee", Toast.LENGTH_SHORT).show();
+           return;
+       }
         quantity = quantity-1;
         display(quantity);
     }
@@ -31,26 +40,48 @@ public class MainActivity extends AppCompatActivity {
         TextView quantityTextView = (TextView) findViewById(R.id.quantity_test_view);
         quantityTextView.setText("" + number);
     }
-//button
+// - button
 
     public void submitOrder(View view) {
+        EditText nameField = (EditText)findViewById(R.id.name_field);   // editText call for name and convert to String
+        String name = nameField.getText().toString();
+
+
         CheckBox whippedCreamCheckbox= (CheckBox) findViewById(R.id.whipped_cream_checkbox);   // checkbox call whipped cream
         boolean hasWhippedCream = whippedCreamCheckbox.isChecked();
 
         CheckBox chocolateCheckBox = (CheckBox) findViewById(R.id.chocolate_checkbox);  // checkbox call chocolate
         boolean hasChocolate = chocolateCheckBox.isChecked();
 
-        int price =calculatePrice();
-        String priceMessage= createOrderSummary(price,hasWhippedCream,hasChocolate);
+        int price =calculatePrice(hasWhippedCream,hasChocolate);
+        String priceMessage= createOrderSummary(name,price,hasWhippedCream,hasChocolate);
+
         displayMessage(priceMessage);
 
     }
-    private int calculatePrice(){
-        int price=quantity*5;
-        return price;
+    private int calculatePrice(boolean cream,boolean chocolate){
+        int baseprice=5;
+        if(cream)
+        {
+            baseprice +=1 ;
+        }
+       if(chocolate)
+       {
+           baseprice +=2;
+       }
+        return quantity*baseprice;
     }
-    private String createOrderSummary(int price,boolean addWhippedCream,boolean addChocolate){
-        String priceMessage="Name: S Pranav";
+    /**
+     * Create summary of the order.
+     * @param name is the user input choice
+     * @param addWhippedCream is whether or not the user wants whipped cream topping
+     * @param addChocolate is whether or not the user wants chocolate topping
+     * @param price of the order
+     * @return text summary
+     */
+
+    private String createOrderSummary(String name,int price,boolean addWhippedCream,boolean addChocolate){
+        String priceMessage="Name: "+ name;
         priceMessage += "\nAdd whipped cream? " + addWhippedCream;
         priceMessage += "\nAdd chocolate? " + addChocolate;
         priceMessage += "\nQuantity: "+ quantity;
